@@ -1,0 +1,24 @@
+version: '3.3'
+services:
+  mongo:
+    container_name: mongo-container
+    image: mongo:5
+    restart: always
+    volumes:
+      - ./data:/data/db
+    ports:
+      - "27017:27017"
+  api:
+    container_name: api_container
+    image: node:16
+    working_dir:  /usr/src/app
+    restart: always
+    command: bash -c  "npm install --only=prod && npm run debug"
+    volumes:
+      - ./dist/:/usr/src/app/dist/
+      - ./package.json:/usr/src/app/package.json
+    ports:
+      - "5050:5050"
+      - "9222:9222"
+    links:
+      - "mongo"

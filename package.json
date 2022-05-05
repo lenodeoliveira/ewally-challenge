@@ -6,6 +6,10 @@
   "scripts": {
     "test": "jest --silent --noStackTrace --runInBand  --no-cache",
     "test:staged": "npm test -- --passWithNoTests --detectOpenHandles",
+    "test:verbose": "jest --runInBand",
+    "test:unit": "npm test -- --watch -c jest-unit-config.js",
+    "test:integration": "npm test -- --watch -c jest-integration-config.js",
+    "test:ci": "npm test -- --coverage",
     "prepare": "husky install"
   },
   "repository": {
@@ -29,5 +33,8 @@
     "lint-staged": "^12.4.1",
     "ts-jest": "^28.0.1",
     "typescript": "^4.6.4"
+  },
+  "engines": {
+    "node": "16.x"
   }
 }
