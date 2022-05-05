@@ -1,5 +1,8 @@
 import { MongoHelper } from '../helpers/mongo-helper'
 import { BankPaymentMongoRepository } from './bank-payment-mongo-repository'
+import { Collection } from 'mongodb'
+
+let bankPaymentCollection: Collection
 
 describe('BankPayment Mongo Repository', () => {
   beforeAll(async () => {
@@ -8,6 +11,11 @@ describe('BankPayment Mongo Repository', () => {
 
   afterAll(async () => {
     await MongoHelper.disconnect()
+  })
+
+  beforeEach(async () => {
+    bankPaymentCollection = await MongoHelper.getCollection('bank-payments')
+    await bankPaymentCollection.deleteMany({})
   })
 
   const makeSut = (): BankPaymentMongoRepository => {
