@@ -4,4 +4,4 @@ coverage/
 data
 !src/data
 .vscode
-globalConfig.jso
+globalConfig.json
