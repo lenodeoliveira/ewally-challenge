@@ -10,8 +10,12 @@ describe('BankPayment Mongo Repository', () => {
     await MongoHelper.disconnect()
   })
 
+  const makeSut = (): BankPaymentMongoRepository => {
+    return new BankPaymentMongoRepository()
+  }
+
   test('Should return an bank payment on success', async () => {
-    const sut = new BankPaymentMongoRepository()
+    const sut = makeSut()
     const bankPayment = await sut.add({
       barCode: 888,
       amount: 777,
