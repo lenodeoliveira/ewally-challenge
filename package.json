@@ -1,0 +1,20 @@
+{
+  "name": "ewally-challenge",
+  "version": "0.0.0",
+  "description": "Hands-on challenge for nodeJS developer vacancy at Ewally",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com-lenodeoliveira:lenodeoliveira/ewally-challenge.git"
+  },
+  "author": "John Oliveira",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^17.0.31",
+    "git-commit-msg-linter": "^4.1.2",
+    "typescript": "^4.6.4"
+  }
+}
