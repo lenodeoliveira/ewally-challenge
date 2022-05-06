@@ -1,5 +1,7 @@
 import { LoadBankPaymentController } from './load-bank-payment-controller'
-import { LoadBankPaymentModel, LoadBankPayment } from './load-bank-payment-controller-protocols'
+import { LoadBankPaymentModel, LoadBankPayment, CodeValidator, HttpRequest } from './load-bank-payment-controller-protocols'
+import { badRequest } from '../../../helpers/http/http-helper'
+import { InvalidParamError } from '../../../errors'
 
 const makeFakeBankPayment = (): LoadBankPaymentModel => ({
   amount: '20.00',
@@ -7,9 +9,24 @@ const makeFakeBankPayment = (): LoadBankPaymentModel => ({
   barCode: '21299758700000020000001121100012100447561740'
 })
 
+const makeFakeRequest = (): HttpRequest => ({
+  params: {
+    barCode: '21290001192110001210904475617405975870000002000'
+  }
+})
+
+const makeValidation = (): CodeValidator => {
+  class ValidationStub implements CodeValidator {
+    validate (code: string): Error {
+      return null
+    }
+  }
+  return new ValidationStub()
+}
 interface SutTypes {
   sut: LoadBankPaymentController
   loadBankPaymentStub: LoadBankPayment
+  validationStub: CodeValidator
 }
 
 const makeLoadBankPaymentStub = (): LoadBankPayment => {
@@ -23,18 +40,26 @@ const makeLoadBankPaymentStub = (): LoadBankPayment => {
 
 const makeSut = (): SutTypes => {
   const loadBankPaymentStub = makeLoadBankPaymentStub()
-  const sut = new LoadBankPaymentController(loadBankPaymentStub)
+  const validationStub = makeValidation()
+  const sut = new LoadBankPaymentController(loadBankPaymentStub, validationStub)
   return {
     sut,
-    loadBankPaymentStub
+    loadBankPaymentStub,
+    validationStub
   }
 }
 
 describe('LoadBankPaymentController', () => {
-  test('Should calls LoadBankPayment', async () => {
+  test('Should calls LoadBankPayment with correct value', async () => {
     const { sut, loadBankPaymentStub } = makeSut()
     const loadSpy = jest.spyOn(loadBankPaymentStub, 'load')
-    await sut.handle({})
-    expect(loadSpy).toHaveBeenCalled()
+    await sut.handle(makeFakeRequest())
+    expect(loadSpy).toHaveBeenCalledWith('21290001192110001210904475617405975870000002000')
+  })
+  test('Should return 400 if Validation returns an error', async () => {
+    const { sut, validationStub } = makeSut()
+    jest.spyOn(validationStub, 'validate').mockReturnValueOnce(new InvalidParamError('676776'))
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(badRequest(new InvalidParamError('676776')))
   })
 })
