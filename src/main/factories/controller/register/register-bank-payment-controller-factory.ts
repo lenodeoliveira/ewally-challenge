@@ -5,7 +5,7 @@ import { makeRegisterBankPaymentValidation } from './register-bank-payment-valid
 import { makeDbAddBankPayment } from '../../usecases/add-bank-payment/db-add-bank-payment-factory'
 import { makeLogControllerDecorator } from '../../decorators/log-controller-decorator-factory'
 
-export const makeSignUpController = (): Controller => {
+export const makeRegisterBankPaymentController = (): Controller => {
   const controller = new BankPaymentController(makeDbAddBankPayment(), makeRegisterBankPaymentValidation())
   return makeLogControllerDecorator(controller)
 }
