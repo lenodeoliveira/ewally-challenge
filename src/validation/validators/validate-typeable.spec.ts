@@ -6,7 +6,7 @@ const makeSut = (): ValidateTypeable => {
   return new ValidateTypeable()
 }
 
-describe('', () => {
+describe('ValidateTypeable', () => {
   test('Should return InvalidParamError when passed a number in the editable line', () => {
     const sut = makeSut()
     const error = sut.validate('2129000119211000121090447561740597587000000200A')
