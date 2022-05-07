@@ -1,5 +1,3 @@
-// import { MissingParamError } from '../../presentation/errors'
-
 export class CalculationDueDateFactor {
   constructor (private readonly date: Date) {}
 
