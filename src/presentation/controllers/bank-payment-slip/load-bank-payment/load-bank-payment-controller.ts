@@ -1,5 +1,5 @@
 import { Controller, HttpRequest, HttpResponse, LoadBankPayment, CodeValidator } from './load-bank-payment-controller-protocols'
-import { serverError, badRequest } from '../../../helpers/http/http-helper'
+import { serverError, badRequest, ok } from '../../../helpers/http/http-helper'
 export class LoadBankPaymentController implements Controller {
   constructor (
     private readonly loadBankPayment: LoadBankPayment,
@@ -12,8 +12,8 @@ export class LoadBankPaymentController implements Controller {
       if (error) {
         return badRequest(error)
       }
-      await this.loadBankPayment.load(httpRequest.params.barCode)
-      return null
+      const result = await this.loadBankPayment.load(httpRequest.params.barCode)
+      return ok(result)
     } catch (error: any) {
       return serverError(error)
     }

@@ -1,7 +1,7 @@
 import { LoadBankPaymentController } from './load-bank-payment-controller'
 import { LoadBankPaymentModel, LoadBankPayment, CodeValidator, HttpRequest } from './load-bank-payment-controller-protocols'
-import { badRequest } from '../../../helpers/http/http-helper'
-import { InvalidParamError } from '../../../errors'
+import { badRequest, ok, serverError } from '../../../helpers/http/http-helper'
+import { InvalidParamError, ServerError } from '../../../errors'
 
 const makeFakeBankPayment = (): LoadBankPaymentModel => ({
   amount: '20.00',
@@ -61,5 +61,25 @@ describe('LoadBankPaymentController', () => {
     jest.spyOn(validationStub, 'validate').mockReturnValueOnce(new InvalidParamError('676776'))
     const httpResponse = await sut.handle(makeFakeRequest())
     expect(httpResponse).toEqual(badRequest(new InvalidParamError('676776')))
+  })
+
+  test('Should return 200 if valid codeBar is provided', async () => {
+    const { sut } = makeSut()
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(ok({
+      amount: '20.00',
+      expirationDate: '2018-07-16',
+      barCode: '21299758700000020000001121100012100447561740'
+    }))
+  })
+
+  test('Should return 500 if LoadBankPayment throws', async () => {
+    const { sut, loadBankPaymentStub } = makeSut()
+
+    jest.spyOn(loadBankPaymentStub, 'load').mockImplementationOnce(async () => {
+      return await new Promise((_resolve, reject) => reject(new Error()))
+    })
+    const httpResponse = await sut.handle(makeFakeRequest())
+    expect(httpResponse).toEqual(serverError(new ServerError(null)))
   })
 })
