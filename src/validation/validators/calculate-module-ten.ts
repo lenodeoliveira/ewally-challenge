@@ -1,3 +1,5 @@
+import { InvalidParamError } from '../../presentation/errors'
+
 export class CalculateModuleTen {
   returnThreeField (barCode: string): Object {
     const fieldOne = barCode.slice(0, 4) + barCode.slice(19, 24)
@@ -46,12 +48,14 @@ export class CalculateModuleTen {
     return digitVerification
   }
 
-  checkVerifiableDigits (digitline: string, digitsVerify: number[]): boolean {
+  checkVerifiableDigits (digitline: string, digitsVerify: number[]): Error {
     const vdsDigitableLine = digitline[9] + digitline[20] + digitline[31]
     const result = vdsDigitableLine.toString().split('')
     const numbers = result.map(Number)
 
-    return this.arrayEquals(numbers, digitsVerify)
+    if (!this.arrayEquals(numbers, digitsVerify)) {
+      return new InvalidParamError('Invalid verification digit')
+    }
   }
 
   arrayEquals (arrayA: number[], arrayB: number[]): boolean {
