@@ -12,50 +12,8 @@ export class LoadBankPaymentUseCaseValidation {
     }
 
     if (line.length === 47) {
-      const returnCode = new TransformBarCode(line.length)
-      const transformBar = returnCode.getBarCode(line)
-      const calculateModuleTenTitulo = new CalculateModuleTen()
-      const threeFields = calculateModuleTenTitulo.returnThreeField(transformBar)
-      const digits: number[] = []
-      Object.entries(threeFields).forEach(
-        ([key, value]) => {
-          const vd = calculateModuleTenTitulo.calculationModuleTen(value)
-          digits.push(vd)
-        }
-      )
-      const er = calculateModuleTenTitulo.checkVerifiableDigits(line, digits)
-      if (er) {
-        return er
-      }
-      const calculateModuleElevenTitulo = new CalculateModuleEleven()
-      const getPositions = calculateModuleElevenTitulo.getPositions(transformBar)
-
-      const codeVerification = calculateModuleElevenTitulo.getCodeVerification(transformBar)
-      const erCodeEleven = calculateModuleElevenTitulo.calculationModuleEleven(getPositions, codeVerification, 47)
-      if (erCodeEleven) {
-        return erCodeEleven
-      }
-
-      const price = transformBar.slice(10, 19) // valor
-
-      const fieldDate = transformBar.slice(5, 9) // date
-
-      const baseDate = new Date('10-07-1997')
-
-      const getInvoice = new GetInvoice(price)
-      const amount = getInvoice.calculateValue()
-      const instanceCalculateDate = new CalculationDueDateFactor(baseDate)
-      const barCode = transformBar
-      const expirationDate = instanceCalculateDate.validateDate(Number(fieldDate))
-
-      return {
-        barCode,
-        amount,
-        expirationDate
-      }
+      return this.validationTitle(line)
     } else {
-      console.log('48 gitis')
-
       if (Number(line[0]) !== 8) {
         return new InvalidParamError('Is not Eight in first element')
       }
@@ -92,6 +50,50 @@ export class LoadBankPaymentUseCaseValidation {
         barCode,
         amount
       }
+    }
+  }
+
+  validationTitle (line: string): Object {
+    const returnCode = new TransformBarCode(line.length)
+    const transformBar = returnCode.getBarCode(line)
+    const calculateModuleTenTitulo = new CalculateModuleTen()
+    const threeFields = calculateModuleTenTitulo.returnThreeField(transformBar)
+    const digits: number[] = []
+    Object.entries(threeFields).forEach(
+      ([key, value]) => {
+        const vd = calculateModuleTenTitulo.calculationModuleTen(value)
+        digits.push(vd)
+      }
+    )
+    const er = calculateModuleTenTitulo.checkVerifiableDigits(line, digits)
+    if (er) {
+      return er
+    }
+    const calculateModuleElevenTitulo = new CalculateModuleEleven()
+    const getPositions = calculateModuleElevenTitulo.getPositions(transformBar)
+
+    const codeVerification = calculateModuleElevenTitulo.getCodeVerification(transformBar)
+    const erCodeEleven = calculateModuleElevenTitulo.calculationModuleEleven(getPositions, codeVerification, 47)
+    if (erCodeEleven) {
+      return erCodeEleven
+    }
+
+    const price = transformBar.slice(10, 19) // valor
+
+    const fieldDate = transformBar.slice(5, 9) // date
+
+    const baseDate = new Date('10-07-1997')
+
+    const getInvoice = new GetInvoice(price)
+    const amount = getInvoice.calculateValue()
+    const instanceCalculateDate = new CalculationDueDateFactor(baseDate)
+    const barCode = transformBar
+    const expirationDate = instanceCalculateDate.validateDate(Number(fieldDate))
+
+    return {
+      barCode,
+      amount,
+      expirationDate
     }
   }
 }
