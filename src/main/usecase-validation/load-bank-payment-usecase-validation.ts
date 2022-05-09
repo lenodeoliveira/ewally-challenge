@@ -3,7 +3,7 @@
 import { InvalidParamError } from '../../presentation/errors'
 import { CalculateModuleEleven, CalculateModuleTen, CalculationDueDateFactor, GetInvoice, TransformBarCode, ValidateTypeable } from '../../validation/validators'
 
-export class LoadBankPaymentUseCase {
+export class LoadBankPaymentUseCaseValidation {
   load (line: string): any {
     const verifyCode = new ValidateTypeable()
     const error = verifyCode.validate(line)
