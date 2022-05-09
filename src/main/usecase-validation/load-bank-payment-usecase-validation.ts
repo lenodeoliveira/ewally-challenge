@@ -4,7 +4,7 @@ import { InvalidParamError } from '../../presentation/errors'
 import { CalculateModuleEleven, CalculateModuleTen, CalculationDueDateFactor, GetInvoice, TransformBarCode, ValidateTypeable } from '../../validation/validators'
 
 export class LoadBankPaymentUseCaseValidation {
-  load (line: string): any {
+  load (line: string): Object {
     const verifyCode = new ValidateTypeable()
     const error = verifyCode.validate(line)
     if (error) {
