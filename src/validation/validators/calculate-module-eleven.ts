@@ -14,7 +14,7 @@ export class CalculateModuleEleven {
     return numberCodeVerification
   }
 
-  calculationModuleEleven (field: number[], vdCode: number): number | Error {
+  calculationModuleEleven (field: number[], vdCode: number, type: number): number | Error {
     const module = 11
     let multiplier = 2
     let total = 0
@@ -34,13 +34,19 @@ export class CalculateModuleEleven {
     const rest = total % module
     let verificationCode = module - rest
 
-    if (verificationCode === 0 || verificationCode === 10 || verificationCode === 11) {
-      verificationCode = 1
+    if (type === 47) {
+      if (verificationCode === 0 || verificationCode === 10 || verificationCode === 11) {
+        verificationCode = 1
+      }
+    } else if (type === 48) {
+      if (verificationCode === 0 || verificationCode === 1) {
+        verificationCode = 0
+      } else if (verificationCode === 0) {
+        verificationCode = 1
+      }
     }
 
-    if (verificationCode === vdCode) {
-      return verificationCode
-    } else {
+    if (verificationCode !== vdCode) {
       return new InvalidParamError('Invalid verification digit')
     }
   }

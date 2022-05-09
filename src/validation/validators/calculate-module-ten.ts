@@ -58,6 +58,13 @@ export class CalculateModuleTen {
     }
   }
 
+  checkVerifiableDigitsConvenio (digitoVerificador: number, dv: number): Error {
+    if (digitoVerificador === dv) {
+      return
+    }
+    return new InvalidParamError('Invalid verification digit')
+  }
+
   arrayEquals (arrayA: number[], arrayB: number[]): boolean {
     return Array.isArray(arrayA) &&
     Array.isArray(arrayB) &&

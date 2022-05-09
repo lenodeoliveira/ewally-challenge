@@ -7,15 +7,15 @@ describe('CalculateModuleEleven', () => {
     const sut = new CalculateModuleEleven()
     const getPositions = sut.getPositions(barCode)
     const codeVerification = sut.getCodeVerification(barCode)
-    const returnCodeVerification = sut.calculationModuleEleven(getPositions, codeVerification)
-    expect(codeVerification).toBe(returnCodeVerification)
+    const error = sut.calculationModuleEleven(getPositions, codeVerification, 47)
+    expect(error).toBeFalsy()
   })
 
   test('Should return an error if the check digit is incorrect', () => {
     const barCode = '00193373700000001000500940144816060680935031'
     const sut = new CalculateModuleEleven()
     const getPositions = sut.getPositions(barCode)
-    const error = sut.calculationModuleEleven(getPositions, 8)
+    const error = sut.calculationModuleEleven(getPositions, 8, 47)
     expect(error).toEqual(new InvalidParamError('Invalid verification digit'))
   })
 })
