@@ -58,11 +58,14 @@ export class CalculateModuleTen {
     }
   }
 
-  checkVerifiableDigitsConvenio (digitoVerificador: number, dv: number): Error {
-    if (digitoVerificador === dv) {
-      return
+  checkVerifiableDigitsConvenio (digitline: string, digitsVerify: number[]): Error {
+    const correctsVds = digitline.slice(11, 12) + digitline.slice(23, 24) + digitline.slice(35, 36) + digitline.slice(47, 48)
+    const result = correctsVds.toString().split('')
+    const numbers = result.map(Number)
+
+    if (!this.arrayEquals(numbers, digitsVerify)) {
+      return new InvalidParamError('Invalid verification digit')
     }
-    return new InvalidParamError('Invalid verification digit')
   }
 
   arrayEquals (arrayA: number[], arrayB: number[]): boolean {
