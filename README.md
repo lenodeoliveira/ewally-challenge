@@ -48,7 +48,7 @@ The proposed test aims to obtain a typeable line (agreement or security) through
 * `npm test`
 * `npm start`
 
-> :warning: **The project can also be run by Docker using below commands: 🐳 **
+> :warning: **The project can also be run by Docker using below commands**: 🐳
 
 * `npm run up`
 * `npm run down`
