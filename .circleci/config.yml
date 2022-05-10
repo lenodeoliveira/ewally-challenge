@@ -25,3 +25,6 @@ jobs:
           command: npm run test:coveralls
       - coveralls/upload:
           verbose: true
+      - run:
+          name: Building
+          command: npm run build
