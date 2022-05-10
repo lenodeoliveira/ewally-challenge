@@ -5,7 +5,7 @@
 The proposed test aims to obtain a typeable line (agreement or security) through endpoint /boleto and verify that the typeable line is valid and return the values ​​of the bar code, invoice amount and due date.
 
 ## Routes for titles:
-## `/boleto`
+#### `/boleto`
 | Method   |     endpoint      | status code
 |----------|:-----------------:|-----------:
 | GET      | /boleto/:code     | 200
@@ -24,7 +24,7 @@ The proposed test aims to obtain a typeable line (agreement or security) through
 <hr/>
 
 ## Routes for agreements:
-## `/boleto`
+#### `/boleto`
 | Method   |     endpoint      | status code
 |----------|:-----------------:|-----------:
 | GET      | /boleto/:code     | 200
