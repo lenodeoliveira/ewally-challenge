@@ -67,7 +67,7 @@ describe('CalculateModuleTen', () => {
         digits.push(vd)
       }
     )
-    const error = sut.checkVerifiableDigits(line, [9, 9, 9])
+    const error = sut.checkVerifiableDigitsTitle(line, [9, 9, 9])
     expect(error).toEqual(new InvalidParamError('Invalid verification digit'))
   })
 })

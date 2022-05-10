@@ -19,19 +19,23 @@ export class LoadBankPaymentUseCaseValidation {
   validationTitle (line: string): Object {
     const returnCode = new TransformBarCode(line.length)
     const transformBar = returnCode.getBarCode(line)
-    const calculateModuleTenTitulo = new CalculateModuleTen()
     const threeFields = this.returnThreeField(transformBar)
     const digits: number[] = []
+
+    const calculateModuleTenTitulo = new CalculateModuleTen()
+
     Object.entries(threeFields).forEach(
       ([key, value]) => {
         const vd = calculateModuleTenTitulo.calculationModuleTen(value)
         digits.push(vd)
       }
     )
-    const er = calculateModuleTenTitulo.checkVerifiableDigits(line, digits)
+    const er = calculateModuleTenTitulo.checkVerifiableDigitsTitle(line, digits)
+
     if (er) {
       return er
     }
+
     const calculateModuleElevenTitulo = new CalculateModuleEleven()
     const getPositions = this.getPositionsTitleForModuleEleven(transformBar)
 
@@ -47,8 +51,8 @@ export class LoadBankPaymentUseCaseValidation {
 
     const baseDate = new Date('10-07-1997')
 
-    const getInvoice = new GetInvoice(price)
-    const amount = getInvoice.calculateValue()
+    const getInvoice = new GetInvoice()
+    const amount = getInvoice.calculateValue(price)
     const instanceCalculateDate = new CalculationDueDateFactor(baseDate)
     const barCode = transformBar
     const expirationDate = instanceCalculateDate.validateDate(Number(fieldDate))
@@ -114,8 +118,8 @@ export class LoadBankPaymentUseCaseValidation {
       return new InvalidParamError('Invalid verification digit')
     }
 
-    const getInvoice = new GetInvoice(barCode.slice(4, 15))
-    const amount = getInvoice.calculateValue()
+    const getInvoice = new GetInvoice()
+    const amount = getInvoice.calculateValue(barCode.slice(4, 15))
 
     return {
       barCode,

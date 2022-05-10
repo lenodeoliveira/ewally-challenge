@@ -8,10 +8,10 @@ export class CalculateModuleTen {
     for (let i = 0; i < field.length; i++) {
       if (multiplier % 2 === 0) {
         sum = multiplier * field[i]
-        if (sum > 9) {
-          const result = sum.toString().split('')
-          const numbers = result.map(Number)
-          total += numbers[0] + numbers[1]
+        if (sum > 9) { // caso o resultado seja maior que nove
+          const result = sum.toString().split('') // transforma em array [1, 7]
+          const numbers = result.map(Number) // array de numeros
+          total += numbers[0] + numbers[1] // 1 + 7
         } else {
           total += sum
         }
@@ -23,8 +23,8 @@ export class CalculateModuleTen {
       }
     }
 
-    const module = total % 10
-    let digitVerification = 10 - module
+    const rest = total % 10
+    let digitVerification = 10 - rest
 
     if (digitVerification === 10) {
       digitVerification = 0
@@ -33,7 +33,7 @@ export class CalculateModuleTen {
     return digitVerification
   }
 
-  checkVerifiableDigits (digitline: string, digitsVerify: number[]): Error {
+  checkVerifiableDigitsTitle (digitline: string, digitsVerify: number[]): Error {
     const vdsDigitableLine = digitline[9] + digitline[20] + digitline[31]
     const result = vdsDigitableLine.toString().split('')
     const numbers = result.map(Number)

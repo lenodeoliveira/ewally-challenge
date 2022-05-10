@@ -1,10 +1,6 @@
 export class GetInvoice {
-  constructor (
-    private readonly barCodeSnippet: string
-  ) {}
-
-  calculateValue (): number {
-    const numbBarCode = Number(this.barCodeSnippet)
+  calculateValue (barCodeSnippet: string): number {
+    const numbBarCode = Number(barCodeSnippet)
     const result = numbBarCode / 100
     return result
   }
