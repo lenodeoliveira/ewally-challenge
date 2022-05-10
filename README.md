@@ -44,14 +44,12 @@ The proposed test aims to obtain a typeable line (agreement or security) through
 
 ### Install the dependencies, run the build, run the tests and run the project 
 
-`npm run build`
-`npm start`
-`npm test`
-    "up": "npm run build && docker-compose up -d",
-    "down": "docker-compose down",
+* `npm run build`
+* `npm start`
+* `npm test`
 
 > :warning: **ATTENTION READ THE NOTES!**
 #### The project can also be run by Docker using below commands: 🐳 
 
-`npm run up`
-`npm run down`
+* `npm run up`
+* `npm run down`
