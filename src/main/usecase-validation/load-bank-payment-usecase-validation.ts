@@ -33,9 +33,9 @@ export class LoadBankPaymentUseCaseValidation {
       return er
     }
     const calculateModuleElevenTitulo = new CalculateModuleEleven()
-    const getPositions = calculateModuleElevenTitulo.getPositions(transformBar)
+    const getPositions = this.getPositionsTitleForModuleEleven(transformBar)
 
-    const codeVerification = calculateModuleElevenTitulo.getCodeVerification(transformBar)
+    const codeVerification = this.getCodeVerificationTitleForModuleEleven(transformBar)
     const erCodeEleven = calculateModuleElevenTitulo.calculationModuleEleven(getPositions, codeVerification, 47)
     if (erCodeEleven) {
       return erCodeEleven
@@ -60,10 +60,22 @@ export class LoadBankPaymentUseCaseValidation {
     }
   }
 
-  validationCovenant (line: string): Object {
-    const returnCode48 = new TransformBarCode(line.length)
+  getPositionsTitleForModuleEleven (barCode: string): number[] {
+    const field = barCode.slice(0, 4) + barCode.slice(5)
+    const reverseArray = Array.from(field).reverse()
+    const numbers = reverseArray.map(Number)
+    return numbers
+  }
 
-    const barCode = returnCode48.getBarCode(line)
+  getCodeVerificationTitleForModuleEleven (barCode: string): number {
+    const numberCodeVerification = parseInt(barCode[4])
+    return numberCodeVerification
+  }
+
+  validationCovenant (line: string): Object {
+    const code = new TransformBarCode(line.length)
+
+    const barCode = code.getBarCode(line)
     const identificadordeValor = barCode[2] // verificador para calculo modulo 10 ou 11
     const digitoVerificador = line[3] // codigo verificador do codigo de barras
 
@@ -71,6 +83,7 @@ export class LoadBankPaymentUseCaseValidation {
 
     const calculateModuleTenCovenant = new CalculateModuleTen()
     const digits: number[] = []
+
     if (Number(identificadordeValor) === 6 || Number(identificadordeValor) === 7) {
       Object.entries(forFields).forEach(
         ([key, value]) => {
