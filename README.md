@@ -54,3 +54,20 @@ The proposed test aims to obtain a typeable line (agreement or security) through
 
 * `npm run up`
 * `npm run down`
+
+> ## Libraries and tools used: ⚙️
+* NodeJS
+* Express
+* Docker
+* Circleci
+* Coveralls
+* Jest
+* Eslint
+* Lint Staged
+* Git
+* NPM
+* Husky js
+* Rimraf
+* Typescript
+* Supertest
+* Standard Javascript Style
