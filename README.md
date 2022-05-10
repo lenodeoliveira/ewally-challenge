@@ -1,4 +1,4 @@
- [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+ [![Coverage Status](https://coveralls.io/repos/github/lenodeoliveira/ewally-challenge/badge.svg?branch=main)](https://coveralls.io/github/lenodeoliveira/ewally-challenge?branch=main) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 # Ewally Challenge :rocket:
 
