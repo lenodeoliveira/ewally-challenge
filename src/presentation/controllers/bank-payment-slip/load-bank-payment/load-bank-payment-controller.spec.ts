@@ -12,13 +12,13 @@ describe('LoadBankPaymentController', () => {
   test('Should calls LoadBankPayment with correct value', async () => {
     const sut = new LoadBankPaymentController()
     const loadSpy = jest.spyOn(sut, 'handle')
-    await sut.handle(makeFakeRequest().params.code)
+    sut.handle(makeFakeRequest().params.code)
     expect(loadSpy).toHaveBeenCalledWith('21290001192110001210904475617405975870000002000')
   })
 
   test('Should return 500 if throws', async () => {
     const sut = new LoadBankPaymentController()
-    const httpResponse = await sut.handle(makeFakeRequest().params.fieldNotExists)
+    const httpResponse = sut.handle(makeFakeRequest().params.fieldNotExists)
     expect(httpResponse).toEqual(serverError(new Error()))
   })
 })
