@@ -45,8 +45,8 @@ The proposed test aims to obtain a typeable line (agreement or security) through
 ### Install the dependencies, run the build, run the tests and run the project 
 
 * `npm run build`
-* `npm start`
 * `npm test`
+* `npm start`
 
 > :warning: **ATTENTION READ THE NOTES!**
 #### The project can also be run by Docker using below commands: 🐳 
