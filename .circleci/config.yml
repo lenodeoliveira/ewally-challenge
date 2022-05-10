@@ -8,7 +8,20 @@ jobs:
       - image: 'circleci/node:14.17.6'
     steps:
       - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
       - run:
-          name: install and make tests
-          command: npm install && npm test
-      - coveralls/upload
+          name: install the dependencies
+          command: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - "./node_modules"
+      - run:
+          name: check code style
+          command: npx eslint 'src/**'
+      - run:
+          name: tests and generates coverage report
+          command: npm run test:coveralls
+      - coveralls/upload:
+          verbose: true
