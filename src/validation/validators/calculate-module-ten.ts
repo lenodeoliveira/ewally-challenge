@@ -2,7 +2,7 @@ import { InvalidParamError } from '../../presentation/errors'
 
 export class CalculateModuleTen {
   calculationModuleTen (field: number[]): number {
-    let multiplier = 2
+    let multiplier = 2 // multiplicador começando sempre em 2
     let sum = 0
     let total = 0
     for (let i = 0; i < field.length; i++) {
@@ -34,7 +34,7 @@ export class CalculateModuleTen {
   }
 
   checkVerifiableDigitsTitle (digitline: string, digitsVerify: number[]): Error {
-    const vdsDigitableLine = digitline[9] + digitline[20] + digitline[31]
+    const vdsDigitableLine = digitline[9] + digitline[20] + digitline[31] // pengando os digitos verificáveis da linha digitável
     const result = vdsDigitableLine.toString().split('')
     const numbers = result.map(Number)
 
@@ -44,6 +44,7 @@ export class CalculateModuleTen {
   }
 
   checkVerifiableDigitsConvenio (digitline: string, digitsVerify: number[]): Error {
+    // pegando somente os digitos verificadores da linha digitavel de convenio  para fazer comparação comparacao com resultado
     const correctsVds = digitline.slice(11, 12) + digitline.slice(23, 24) + digitline.slice(35, 36) + digitline.slice(47, 48)
     const result = correctsVds.toString().split('')
     const numbers = result.map(Number)

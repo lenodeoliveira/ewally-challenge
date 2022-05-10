@@ -19,14 +19,20 @@ export class LoadBankPaymentUseCaseValidation {
   validationTitle (line: string): Object {
     const returnCode = new TransformBarCode(line.length)
     const transformBar = returnCode.getBarCode(line)
+
+    // pegando tres arrays com os dados do codigo de barras para calcular e encontrar o DV
     const threeFields = this.returnThreeField(transformBar)
     const digits: number[] = []
 
+    // instancia a classe que calcula o modulo 10
     const calculateModuleTenTitulo = new CalculateModuleTen()
 
+    // passando cada array para o modulo 10
     Object.entries(threeFields).forEach(
       ([key, value]) => {
+        // efetua o calculo do módulo 10
         const vd = calculateModuleTenTitulo.calculationModuleTen(value)
+        // digitos verificadores
         digits.push(vd)
       }
     )
@@ -36,11 +42,17 @@ export class LoadBankPaymentUseCaseValidation {
       return er
     }
 
-    const calculateModuleElevenTitulo = new CalculateModuleEleven()
+    // retorna para o calculo da posicao 1 a 4 e da posicao 6 a 44 do código de barras, menos posicao 5 (dígito verificador)
     const getPositions = this.getPositionsTitleForModuleEleven(transformBar)
 
+    // dígito verificador
     const codeVerification = this.getCodeVerificationTitleForModuleEleven(transformBar)
+
+    // instancia modulo 11
+    const calculateModuleElevenTitulo = new CalculateModuleEleven()
+
     const erCodeEleven = calculateModuleElevenTitulo.calculationModuleEleven(getPositions, codeVerification, 47)
+    // verifica erro modulo 11
     if (erCodeEleven) {
       return erCodeEleven
     }
@@ -51,12 +63,16 @@ export class LoadBankPaymentUseCaseValidation {
 
     const baseDate = new Date('10-07-1997')
 
+    // calculo de valores a pagar
     const getInvoice = new GetInvoice()
     const amount = getInvoice.calculateValue(price)
+
+    // calculo de fator de vencimento
     const instanceCalculateDate = new CalculationDueDateFactor(baseDate)
-    const barCode = transformBar
     const expirationDate = instanceCalculateDate.validateDate(Number(fieldDate))
 
+    // obtem codigo de barras
+    const barCode = transformBar
     return {
       barCode,
       amount,
@@ -65,24 +81,27 @@ export class LoadBankPaymentUseCaseValidation {
   }
 
   getPositionsTitleForModuleEleven (barCode: string): number[] {
-    const field = barCode.slice(0, 4) + barCode.slice(5)
+    const field = barCode.slice(0, 4) + barCode.slice(5) // posicoes 1 a 4 e 6 a 44
     const reverseArray = Array.from(field).reverse()
     const numbers = reverseArray.map(Number)
     return numbers
   }
 
   getCodeVerificationTitleForModuleEleven (barCode: string): number {
-    const numberCodeVerification = parseInt(barCode[4])
+    const numberCodeVerification = parseInt(barCode[4]) // pega o dígito verificador da posicao 5
     return numberCodeVerification
   }
 
   validationCovenant (line: string): Object {
+    // transforma em codigo de barras
     const code = new TransformBarCode(line.length)
-
     const barCode = code.getBarCode(line)
-    const identificadordeValor = barCode[2] // verificador para calculo modulo 10 ou 11
-    const digitoVerificador = line[3] // codigo verificador do codigo de barras
 
+    const identificadordeValor = barCode[2] // verificador para calculo modulo 10 ou 11 (valor real ou referencia)
+    const digitoVerificador = line[3] // digito verificador do codigo de barras
+
+    // obtendo os 4 campos da linha digitável para calcular digitos verificadores
+    // Convênio necessario verificar 4 dígitos (um pra cada campo) e pro código de barras verifica 1
     const forFields = this.returnFourFields(line)
 
     const calculateModuleTenCovenant = new CalculateModuleTen()
@@ -100,7 +119,8 @@ export class LoadBankPaymentUseCaseValidation {
       if (er) {
         return new InvalidParamError('Invalid verification digit')
       }
-    } else if (identificadordeValor === '8' || identificadordeValor === '9') {
+    } else if (Number(identificadordeValor) === 7 || Number(identificadordeValor) === 9) {
+      // define a area de 43 posicoes não pegando o valor da posicao 4 que é dígito verificador
       const cut = barCode.slice(0, 3) + barCode.slice(4)
       const arrayFromBarCode = cut.split('')
       const arrayReverse = arrayFromBarCode.reverse()
@@ -112,12 +132,6 @@ export class LoadBankPaymentUseCaseValidation {
       }
     }
 
-    const digit = this.verifyBarCodeDac(barCode)
-
-    if (digit !== Number(digitoVerificador)) {
-      return new InvalidParamError('Invalid verification digit')
-    }
-
     const getInvoice = new GetInvoice()
     const amount = getInvoice.calculateValue(barCode.slice(4, 15))
 
@@ -127,32 +141,11 @@ export class LoadBankPaymentUseCaseValidation {
     }
   }
 
-  verifyBarCodeDac (barCode: string): Object {
-    const cut = barCode.slice(0, 3) + barCode.slice(4)
-    const arrayFromBarCode = cut.split('')
-    const arrayReverse = arrayFromBarCode.reverse()
-    const identificadordeValor = barCode[2] // verificador para calculo modulo 10 ou 11
-    const digitoVerificador = barCode[3] // codigo verificador do codigo de barras
-    const arrayNumbers = arrayReverse.map(Number)
-
-    if (identificadordeValor === '6' || identificadordeValor === '7') {
-      const calculateModule = new CalculateModuleTen()
-      const dv = calculateModule.calculationModuleTen(arrayNumbers)
-      return Number(dv)
-    } else if (identificadordeValor === '8' || identificadordeValor === '9') {
-      const calculateModuleEleven = new CalculateModuleEleven()
-      const err = calculateModuleEleven.calculationModuleEleven(arrayNumbers, Number(digitoVerificador), 48)
-      if (err) {
-        return err
-      }
-    }
-  }
-
-  returnFourFields (barCode: string): Object {
-    const fieldOne = barCode.slice(0, 11)
-    const fieldTwo = barCode.slice(12, 23)
-    const fieldThree = barCode.slice(24, 35)
-    const fieldFour = barCode.slice(36, 47)
+  returnFourFields (line: string): Object {
+    const fieldOne = line.slice(0, 11)
+    const fieldTwo = line.slice(12, 23)
+    const fieldThree = line.slice(24, 35)
+    const fieldFour = line.slice(36, 47)
 
     const fieldOneToArrayRev = Array.from(fieldOne).reverse()
     const fieldTwoToArrayRev = Array.from(fieldTwo).reverse()
