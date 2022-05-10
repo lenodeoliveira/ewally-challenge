@@ -55,7 +55,7 @@ The proposed test aims to obtain a typeable line (agreement or security) through
 * `npm run up`
 * `npm run down`
 
-> ## Libraries and tools used: ⚙️
+### Libraries and tools used: ⚙️
 * NodeJS
 * Express
 * Docker
