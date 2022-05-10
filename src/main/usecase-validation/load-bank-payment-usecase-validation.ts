@@ -20,7 +20,7 @@ export class LoadBankPaymentUseCaseValidation {
     const returnCode = new TransformBarCode(line.length)
     const transformBar = returnCode.getBarCode(line)
     const calculateModuleTenTitulo = new CalculateModuleTen()
-    const threeFields = calculateModuleTenTitulo.returnThreeField(transformBar)
+    const threeFields = this.returnThreeField(transformBar)
     const digits: number[] = []
     Object.entries(threeFields).forEach(
       ([key, value]) => {
@@ -146,6 +146,21 @@ export class LoadBankPaymentUseCaseValidation {
       fieldTwoToArrayRev,
       fieldThreeToArrayRev,
       fieldFourToArrayRev
+    }
+  }
+
+  returnThreeField (barCode: string): Object {
+    const fieldOne = barCode.slice(0, 4) + barCode.slice(19, 24)
+    const fieldTwo = barCode.slice(24, 34)
+    const fieldThree = barCode.slice(34, 44)
+
+    const fieldOneToArrayRev = Array.from(fieldOne).reverse()
+    const fieldTwoToArrayRev = Array.from(fieldTwo).reverse()
+    const fieldThreeToArrayRev = Array.from(fieldThree).reverse()
+    return {
+      fieldOneToArrayRev,
+      fieldTwoToArrayRev,
+      fieldThreeToArrayRev
     }
   }
 }

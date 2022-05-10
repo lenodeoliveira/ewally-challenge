@@ -1,21 +1,6 @@
 import { InvalidParamError } from '../../presentation/errors'
 
 export class CalculateModuleTen {
-  returnThreeField (barCode: string): Object {
-    const fieldOne = barCode.slice(0, 4) + barCode.slice(19, 24)
-    const fieldTwo = barCode.slice(24, 34)
-    const fieldThree = barCode.slice(34, 44)
-
-    const fieldOneToArrayRev = Array.from(fieldOne).reverse()
-    const fieldTwoToArrayRev = Array.from(fieldTwo).reverse()
-    const fieldThreeToArrayRev = Array.from(fieldThree).reverse()
-    return {
-      fieldOneToArrayRev,
-      fieldTwoToArrayRev,
-      fieldThreeToArrayRev
-    }
-  }
-
   calculationModuleTen (field: number[]): number {
     let multiplier = 2
     let sum = 0
