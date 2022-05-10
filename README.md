@@ -10,7 +10,7 @@ The proposed test aims to obtain a typeable line (agreement or security) through
 |----------|:-----------------:|-----------:
 | GET      | /boleto/:code     | 200
 
-> ## EX: `http://localhost:8080/boleto/817700000000010936599702411310797039001433708318`
+> example: `http://localhost:8080/boleto/817700000000010936599702411310797039001433708318`
 
 #### Response
 
@@ -30,7 +30,7 @@ The proposed test aims to obtain a typeable line (agreement or security) through
 | GET      | /boleto/:code     | 200
 
 
-> ## EX: `http://localhost:8080/boleto/21290001192110001210904475617405975870000002000`
+> example: `http://localhost:8080/boleto/21290001192110001210904475617405975870000002000`
 
 #### Response
 
