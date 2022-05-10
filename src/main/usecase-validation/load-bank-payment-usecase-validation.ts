@@ -66,7 +66,7 @@ export class LoadBankPaymentUseCaseValidation {
     const barCode = returnCode48.getBarCode(line)
     const identificadordeValor = barCode[2] // verificador para calculo modulo 10 ou 11
     const digitoVerificador = line[3] // codigo verificador do codigo de barras
-    console.log(digitoVerificador)
+
     const forFields = this.returnFourFields(line)
 
     const calculateModuleTenCovenant = new CalculateModuleTen()
@@ -82,6 +82,16 @@ export class LoadBankPaymentUseCaseValidation {
 
       if (er) {
         return new InvalidParamError('Invalid verification digit')
+      }
+    } else if (identificadordeValor === '8' || identificadordeValor === '9') {
+      const cut = barCode.slice(0, 3) + barCode.slice(4)
+      const arrayFromBarCode = cut.split('')
+      const arrayReverse = arrayFromBarCode.reverse()
+      const arrayNumbers = arrayReverse.map(Number)
+      const calculateModuleEleven = new CalculateModuleEleven()
+      const err = calculateModuleEleven.calculationModuleEleven(arrayNumbers, Number(digitoVerificador), 48)
+      if (err) {
+        return err
       }
     }
 
