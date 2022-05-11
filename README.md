@@ -4,7 +4,7 @@
 
 ### NodeJS Developer Test Resolution for Ewally
 
-The proposed test aims to obtain a typeable line (agreement or security) through endpoint /boleto and verify that the typeable line is valid and return the values ​​of the bar code, invoice amount and due date.
+The proposed test aims to obtain a typeable line (agreement or security) through endpoint `/boleto` and verify that the typeable line is valid and return the values ​​of the bar code, invoice amount and due date.
 
 ## Routes for titles:
 #### `/boleto`
