@@ -108,7 +108,6 @@ export class LoadBankPaymentUseCaseValidation {
     const digits: number[] = []
 
     if (Number(identificadordeValor) === 6 || Number(identificadordeValor) === 7) {
-      console.log('PODE TER ENTRADO AQUI MODULE TEN 48')
       Object.entries(forFields).forEach(
         ([key, value]) => {
           const vd = calculateModuleTenCovenant.calculationModuleTen(value)
@@ -122,7 +121,6 @@ export class LoadBankPaymentUseCaseValidation {
       }
     } else if (Number(identificadordeValor) === 7 || Number(identificadordeValor) === 9) {
       // define a area de 43 posicoes não pegando o valor da posicao 4 que é dígito verificador
-      console.log('PODE TER ENTRADO AQUI MODULE ELEVEN 48')
       const cut = barCode.slice(0, 3) + barCode.slice(4)
       const arrayFromBarCode = cut.split('')
       const arrayReverse = arrayFromBarCode.reverse()
@@ -134,12 +132,39 @@ export class LoadBankPaymentUseCaseValidation {
       }
     }
 
+    const digit = this.verifyBarCodeDac(barCode)
+
+    if (digit !== Number(digitoVerificador)) {
+      return new InvalidParamError('Invalid verification digit')
+    }
+
     const getInvoice = new GetInvoice()
     const amount = getInvoice.calculateValue(barCode.slice(4, 15))
 
     return {
       barCode,
       amount
+    }
+  }
+
+  verifyBarCodeDac (barCode: string): Object {
+    const cut = barCode.slice(0, 3) + barCode.slice(4)
+    const arrayFromBarCode = cut.split('')
+    const arrayReverse = arrayFromBarCode.reverse()
+    const identificadordeValor = barCode[2] // verificador para calculo modulo 10 ou 11
+    const digitoVerificador = barCode[3] // codigo verificador do codigo de barras
+    const arrayNumbers = arrayReverse.map(Number)
+
+    if (identificadordeValor === '6' || identificadordeValor === '7') {
+      const calculateModule = new CalculateModuleTen()
+      const dv = calculateModule.calculationModuleTen(arrayNumbers)
+      return Number(dv)
+    } else if (identificadordeValor === '8' || identificadordeValor === '9') {
+      const calculateModuleEleven = new CalculateModuleEleven()
+      const err = calculateModuleEleven.calculationModuleEleven(arrayNumbers, Number(digitoVerificador), 48)
+      if (err) {
+        return err
+      }
     }
   }
 
