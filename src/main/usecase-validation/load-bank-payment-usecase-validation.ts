@@ -108,6 +108,7 @@ export class LoadBankPaymentUseCaseValidation {
     const digits: number[] = []
 
     if (Number(identificadordeValor) === 6 || Number(identificadordeValor) === 7) {
+      console.log('PODE TER ENTRADO AQUI MODULE TEN 48')
       Object.entries(forFields).forEach(
         ([key, value]) => {
           const vd = calculateModuleTenCovenant.calculationModuleTen(value)
@@ -121,6 +122,7 @@ export class LoadBankPaymentUseCaseValidation {
       }
     } else if (Number(identificadordeValor) === 7 || Number(identificadordeValor) === 9) {
       // define a area de 43 posicoes não pegando o valor da posicao 4 que é dígito verificador
+      console.log('PODE TER ENTRADO AQUI MODULE ELEVEN 48')
       const cut = barCode.slice(0, 3) + barCode.slice(4)
       const arrayFromBarCode = cut.split('')
       const arrayReverse = arrayFromBarCode.reverse()
