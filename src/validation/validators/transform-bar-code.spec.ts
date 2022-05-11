@@ -1,6 +1,6 @@
 import { TransformBarCode } from './transform-bar-code'
 
-describe('R', () => {
+describe('TransformBarCode', () => {
   test('Should return the correct barcode for a title', () => {
     const sut = new TransformBarCode(47)
     const code = sut.getBarCode('21290001192110001210904475617405975870000002000')
